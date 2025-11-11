@@ -1,15 +1,25 @@
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('fonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
+    url('fonts/Vazirmatn[wght].woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer components {
   .time-box {
-    @apply border border-[#00000033] shadow shadow-zinc-400 bg-zinc-400 px-2 py-3 rounded-xl font-bold text-white tracking-widest;
+    @apply rounded-xl border border-[#00000033] bg-zinc-400 px-2 py-3 font-bold tracking-widest text-white shadow shadow-zinc-400;
   }
   .glass-button {
-    @apply border border-zinc-500 p-2 rounded-lg font-medium transition-all duration-200 text-zinc-500 m-0;
+    @apply m-0 rounded-lg border border-zinc-500 p-2 font-medium text-zinc-500 transition-all duration-200;
   }
   .selected {
-    @apply border-primary text-primary bg-alpha;
+    @apply border-primary bg-alpha text-primary;
   }
 }
 
@@ -24,11 +34,11 @@
 }
 html {
   scrollbar-gutter: stable;
-  font-family: "Vazirmatn", sans-serif;
+  font-family: 'Vazirmatn', sans-serif;
 }
 
 .header::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;

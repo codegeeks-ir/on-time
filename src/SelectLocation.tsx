@@ -1,46 +1,145 @@
-import React, { useMemo } from "react";
-import { scheduleType } from "./xlsxLoader";
-type props = {
-  times: scheduleType[];
-  activeTimer: number;
-  setActiveTimer: React.Dispatch<React.SetStateAction<number>>;
-};
-export default function SelectLocation({
-  times,
-  activeTimer,
-  setActiveTimer,
-}: props) {
-  const titles = useMemo(() => {
-    return times.map((item) => {
-      return item.origin;
-    });
-  }, [times]);
+import React, { useEffect, useMemo, useState } from 'react'
+import type { scheduleType } from './xlsxLoader'
+import { ArrowUpDown } from 'lucide-react'
+type Props = {
+  times: scheduleType[]
+  activeTimer: number
+  setActiveTimer: React.Dispatch<React.SetStateAction<number>>
+}
 
-  function handleLocationSwitch(index: number) {
-    setActiveTimer(index);
+export default function SelectLocation({ times, activeTimer, setActiveTimer }: Props) {
+  const tree = useMemo(() => {
+    const m = new Map<string, { destiny: string; id: number }[]>()
+    times.forEach((t, i) => {
+      const origin = t.origin ?? ''
+      const leaf = { destiny: t.destiny ?? '', id: i }
+      if (!m.has(origin)) m.set(origin, [])
+      m.get(origin)!.push(leaf)
+    })
+    const sorted = new Map<string, { destiny: string; id: number }[]>()
+    Array.from(m.keys())
+      .sort()
+      .forEach((k) =>
+        sorted.set(
+          k,
+          m.get(k)!.sort((a, b) => a.destiny.localeCompare(b.destiny))
+        )
+      )
+    return sorted
+  }, [times])
+
+  const [selectedOrigin, setSelectedOrigin] = useState<string>('')
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (times[activeTimer]) {
+      setSelectedOrigin(times[activeTimer].origin)
+      setSelectedScheduleId(activeTimer)
+      return
+    }
+    const it = tree.keys().next()
+    if (!it.done) {
+      const origin = it.value
+      setSelectedOrigin(origin)
+      const leaves = tree.get(origin) ?? []
+      setSelectedScheduleId(leaves.length ? leaves[0].id : null)
+    } else {
+      setSelectedOrigin('')
+      setSelectedScheduleId(null)
+    }
+  }, [activeTimer, times, tree])
+
+  function handleOriginChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const origin = e.target.value
+    setSelectedOrigin(origin)
+
+    const leaves = tree.get(origin) ?? []
+    if (leaves.length) {
+      setSelectedScheduleId(leaves[0].id)
+      setActiveTimer(leaves[0].id)
+    } else {
+      setSelectedScheduleId(null)
+    }
   }
 
+  function handleDestinationChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const raw = e.target.value
+    const id = raw === '' ? null : Number(raw)
+    setSelectedScheduleId(id)
+    if (id != null) setActiveTimer(id)
+  }
+
+  function handleReverse() {
+    const curOrigin = selectedOrigin
+    const curDest = selectedScheduleId != null ? (times[selectedScheduleId]?.destiny ?? '') : ''
+
+    if (!curOrigin) return
+
+    const found = times.findIndex((t) => t.origin === curDest && t.destiny === curOrigin)
+    if (found !== -1) {
+      setSelectedOrigin(times[found].origin)
+      setSelectedScheduleId(found)
+      setActiveTimer(found)
+      return
+    }
+
+    // not found: swap the UI fields so user sees swapped pair; do NOT force parent to an invalid index
+    setSelectedOrigin(curDest)
+    setSelectedScheduleId(null)
+  }
+
+  const hasNoData = times.length === 0 || tree.size === 0
+  const destinationsForSelectedOrigin = selectedOrigin ? (tree.get(selectedOrigin) ?? []) : []
+
   return (
-    <div className="max-w-screen-sm w-full rtl flex flex-col justify-around gap-4 items-center bg-white rounded-xl mx-auto mt-5 z-10 p-5">
-      <h2 className="text-zinc-600 font-semibold">مبدا خود را انتخاب کنید:</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {times.length == 0 && (
-          <p style={{ gridColumn: "1 / span 2" }}> برنامه‌ای تعریف نشده است</p>
-        )}
-        {titles.map((title, index) => {
-          return (
-            <button
-              onClick={() => handleLocationSwitch(index)}
-              className={
-                index == activeTimer ? "glass-button selected" : "glass-button"
-              }
-              key={title + index}
-            >
-              {title}
-            </button>
-          );
-        })}
+    <div className="rtl z-10 mx-auto mt-5 flex w-full max-w-screen-sm flex-col items-center justify-around gap-5 rounded-xl bg-white p-5 text-sm">
+      <div className="flex w-full flex-col gap-3">
+        <div className="flex-1">
+          <label className="mb-1 block text-xs text-gray-500">مبدا</label>
+          <select
+            className="mt-1 block w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-offset-1"
+            value={selectedOrigin}
+            onChange={handleOriginChange}
+            disabled={hasNoData}
+          >
+            {hasNoData ? <option value="">مبدا موجود نیست</option> : null}
+            {Array.from(tree.keys()).map((origin) => (
+              <option key={origin} value={origin}>
+                {origin}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleReverse}
+          className="selected mt-2 flex justify-center rounded-md border p-3"
+          title="تغییر مبدا با مقصد"
+        >
+          <ArrowUpDown size={18} /> &nbsp;
+          <span>تغییر مبدا با مقصد</span>
+        </button>
+
+        <div className="flex-1">
+          <label className="mb-1 block text-xs text-gray-500">مقصد</label>
+          <select
+            className="mt-1 block w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-offset-1"
+            value={selectedScheduleId ?? ''}
+            onChange={handleDestinationChange}
+            disabled={hasNoData || !selectedOrigin}
+          >
+            {(!selectedOrigin || destinationsForSelectedOrigin.length === 0) && (
+              <option value="">مقصد موجود نیست</option>
+            )}
+            {destinationsForSelectedOrigin.map((leaf) => (
+              <option key={leaf.id} value={leaf.id}>
+                {leaf.destiny}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
-  );
+  )
 }

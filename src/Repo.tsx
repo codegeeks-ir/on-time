@@ -1,48 +1,49 @@
-import { base, origin } from "./vars";
-
+import { base, origin } from './vars'
+import { ExternalLink, Trash } from 'lucide-react'
 type props = {
-  name: string;
-  link: string;
-  remove: (a: string) => void;
-  disabled: boolean;
-};
+  name: string
+  link: string
+  remove: (a: string) => void
+  disabled: boolean
+}
 export default function Repo({ name, link, remove, disabled }: props) {
   function handleShare(name: string, link: string) {
-    let url = `${origin + base}add?name=${name}&link=${link}&rm=true`;
-    navigator.clipboard.writeText(encodeURI(url));
-    alert("آدرس اشتراک گذاری این برنامه با موفقیت کپی شد!");
+    const url = `${origin + base}add?name=${name}&link=${link}&rm=true`
+    navigator.clipboard.writeText(encodeURI(url))
+    alert('آدرس اشتراک گذاری این برنامه با موفقیت کپی شد!')
   }
   return (
-    <div className="flex bg-zinc-100 border-zinc-400 shadow p-5 rounded justify-around items-center gap-3 text-sm">
-      <label>{name}</label>
+    <div className="flex items-center justify-around gap-3 rounded border-zinc-400 bg-zinc-100 p-5 text-sm shadow">
+      <label htmlFor={name}>{name}</label>
       <input
+        id={name}
         type="text"
         value={link}
         readOnly
-        className="p-2 rounded flex-grow ltr overflow-hidden"
+        className="ltr flex-grow overflow-hidden rounded p-2"
       />
       <div className="flex gap-2">
         <button
+          type="button"
           onClick={() => handleShare(name, link)}
-          className="h-5 w-5 flex justify-center items-center bg-zinc-500 p-4 rounded text-white "
+          className="flex h-8 w-8 items-center justify-center rounded bg-zinc-500 text-white"
         >
-          <i className="fas fa-share"></i>
+          <ExternalLink size={20} />
         </button>
         <button
-          className="h-5 w-5 flex justify-center items-center bg-red-700 disabled:opacity-50 p-4 rounded text-white"
+          type="button"
+          className="flex h-8 w-8 items-center justify-center rounded bg-red-700 text-white disabled:opacity-50"
           disabled={disabled}
           onClick={() => {
-            let RuSureAboutDat = confirm(
-              `آیا از حذف برنامه «${name}» مطمئن هستید؟`
-            );
+            const RuSureAboutDat = confirm(`آیا از حذف برنامه «${name}» مطمئن هستید؟`)
             if (RuSureAboutDat) {
-              remove(link);
+              remove(link)
             }
           }}
         >
-          <i className="fas fa-trash"></i>
+          <Trash size={20} />
         </button>
       </div>
     </div>
-  );
+  )
 }
