@@ -13,7 +13,7 @@ export default function Repo({ name, link, remove, disabled }: props) {
     alert('آدرس اشتراک گذاری این برنامه با موفقیت کپی شد!')
   }
   return (
-    <div className="flex items-center justify-around gap-3 rounded border-zinc-400 bg-zinc-100 p-5 text-sm shadow">
+    <div className="flex flex-wrap items-center justify-around gap-3 rounded border-zinc-400 bg-zinc-100 p-5 text-sm shadow">
       <label htmlFor={name}>{name}</label>
       <input
         id={name}

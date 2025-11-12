@@ -73,23 +73,24 @@ function App() {
         <style>
           {`
               :root{
-              --primary: ${`${hue}, 100%, 40%`} ;
+              --primary: ${`${hue}, 75%, 60%`} ;
+              --darker: ${`${hue}, 75%, 40%`} ;
               }
             `}
         </style>
         <div className="header relative flex min-h-96 flex-col bg-primary bg-gradient-to-b px-8 py-5 pb-16 transition duration-200 ease-in">
           <div className="z-10 flex items-center gap-5 text-white">
             <div>
-              <Link to={base} className="flex flex-col items-center gap-3 text-xs no-underline">
+              <Link to={base} className="flex flex-col items-center gap-2 text-xs no-underline">
                 <BusFront size={32} />
-                <h1 className="font-bold">[On-Time]</h1>
+                <h1 className="font-bold">صفحه اصلی</h1>
               </Link>
             </div>
 
             <div className="ml-auto">
               <Link
                 to={`${base}settings`}
-                className="flex flex-col items-center justify-center gap-2 text-xs"
+                className="flex flex-col items-center gap-2 text-xs no-underline"
               >
                 <SettingsIcon size={32} />
                 <p className="font-bold">تنظیمات</p>

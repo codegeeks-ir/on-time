@@ -16,10 +16,10 @@
     @apply rounded-xl border border-[#00000033] bg-zinc-400 px-2 py-3 font-bold tracking-widest text-white shadow shadow-zinc-400;
   }
   .glass-button {
-    @apply m-0 rounded-lg border border-zinc-500 p-2 font-medium text-zinc-500 transition-all duration-200;
+    @apply m-0 rounded-lg border border-zinc-500 p-2 text-zinc-500 transition-all duration-200;
   }
   .selected {
-    @apply border-primary bg-alpha text-primary;
+    @apply text-darker border-primary bg-alpha;
   }
 }
 
@@ -30,7 +30,8 @@
   direction: ltr;
 }
 :root {
-  --primary: 0, 100%, 40%;
+  --primary: 0, 75%, 60%;
+  --darker: 0, 75%, 80%`;
 }
 html {
   scrollbar-gutter: stable;

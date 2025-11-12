@@ -89,7 +89,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
               />
             )
           })}
-          <div className="mt-3 flex justify-center gap-4">
+          <div className="mt-3 flex justify-center gap-4 text-sm">
             <Link to={`${base}add`} className="glass-button selected">
               افزودن برنامه جدید
             </Link>
@@ -127,7 +127,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
 
         <button
           type="button"
-          className="glass-button mx-auto max-w-44"
+          className="glass-button mx-auto max-w-44 text-sm"
           onClick={() => clearSiteData()}
         >
           پاک کردن کش برنامه
