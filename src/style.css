@@ -19,7 +19,7 @@
     @apply m-0 rounded-lg border border-zinc-500 p-2 text-zinc-500 transition-all duration-200;
   }
   .selected {
-    @apply text-darker border-primary bg-alpha;
+    @apply border-primary bg-alpha text-darker;
   }
 }
 

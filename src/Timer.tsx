@@ -4,17 +4,14 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
   const [current, setCurrent] = useState(new Date())
   const [timeIndex, setTimeIndex] = useState(0)
   const timerRef = useRef(0)
-  const [activeSub, setActiveSub] = useState(-1)
+  const [activeSub, setActiveSub] = useState(0)
 
   const times = useMemo((): string[] => {
-    if (activeSub === -1) return timer.times
-    else {
-      if (activeSub < timer.subSchedule.length) {
-        return timer.subSchedule[activeSub].times
-      } else {
-        setActiveSub(-1)
-        return timer.times
-      }
+    if (activeSub < timer.subSchedule.length) {
+      return timer.subSchedule[activeSub].times
+    } else {
+      setActiveSub(0)
+      return timer.subSchedule[0].times
     }
   }, [activeSub, timer])
 
@@ -87,18 +84,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
           </button>
         )
       })
-      return (
-        <div className="m-4 flex justify-center gap-3 text-sm">
-          {subSelector}
-          <button
-            type="button"
-            className={activeSub === -1 ? 'selected glass-button' : 'glass-button'}
-            onClick={() => setActiveSub(-1)}
-          >
-            پیشفرض
-          </button>
-        </div>
-      )
+      return <div className="rtl m-4 flex justify-center gap-3 text-sm">{subSelector}</div>
     }
   }
 
@@ -128,10 +114,13 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
             زمان باقی‌مانده: {calcRemainingTime(times[timeIndex])}
           </p>
         ) : (
-          <p className="rtl text-zinc-500">اتوبوسی پس از این زمان نیست!</p>
+          <p className="rtl text-zinc-500">اتوبوسی پس از این زمان نیست</p>
         )}
         {timesManager()}
-        <ul className="mt-5 grid grid-cols-4 gap-3 text-sm">
+        {times.length == 0 && (
+          <p className="rtl text-zinc-500">لیستی برای این برنامه زمانی تعریف نشده است</p>
+        )}
+        <ul className="rtl mt-5 grid grid-cols-4 gap-3 text-sm">
           {times.map((time, index) => (
             <li
               key={time.toString()}
@@ -145,6 +134,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
             </li>
           ))}
         </ul>
+                {timer.comment && <p className='rtl mt-10 text-neutral-600 leading-loose'><span className='font-bold'>یادداشت:&nbsp; </span>{timer.comment}</p>}
       </div>
     </>
   )

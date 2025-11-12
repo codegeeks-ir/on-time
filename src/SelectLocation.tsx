@@ -9,23 +9,14 @@ type Props = {
 
 export default function SelectLocation({ times, activeTimer, setActiveTimer }: Props) {
   const tree = useMemo(() => {
-    const m = new Map<string, { destiny: string; id: number }[]>()
+    const map = new Map<string, { destiny: string; id: number }[]>()
     times.forEach((t, i) => {
       const origin = t.origin ?? ''
       const leaf = { destiny: t.destiny ?? '', id: i }
-      if (!m.has(origin)) m.set(origin, [])
-      m.get(origin)!.push(leaf)
+      if (!map.has(origin)) map.set(origin, [])
+      map.get(origin)!.push(leaf)
     })
-    const sorted = new Map<string, { destiny: string; id: number }[]>()
-    Array.from(m.keys())
-      .sort()
-      .forEach((k) =>
-        sorted.set(
-          k,
-          m.get(k)!.sort((a, b) => a.destiny.localeCompare(b.destiny))
-        )
-      )
-    return sorted
+    return map
   }, [times])
 
   const [selectedOrigin, setSelectedOrigin] = useState<string>('')
