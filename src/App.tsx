@@ -9,10 +9,11 @@ import { loadTimes, type repoType, type scheduleType } from './xlsxLoader'
 import useLocalStorage from './useLocalStorage'
 import { base } from './vars'
 import { BusFront, Settings as SettingsIcon } from 'lucide-react'
+import About from './About'
 
 export const defaultRepo = [{ name: 'دانشگاه صنعتی ارومیه', link: './UUT-BUS.xlsx' }]
-export type SettingsType = { format24: boolean }
-const defaultSettings: SettingsType = { format24: false }
+export type SettingsType = { format24: boolean; darkMode: boolean }
+const defaultSettings: SettingsType = { format24: false, darkMode: false }
 
 function App() {
   const [times, setTimes] = useState<scheduleType[]>([])
@@ -26,6 +27,14 @@ function App() {
     () => (times.length > 0 ? Math.round((activeTimer / times.length) * 360) : 0),
     [activeTimer, times.length]
   )
+
+  useEffect(() => {
+    if (settings.darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [settings.darkMode])
 
   useEffect(() => {
     setLoading(true)
@@ -50,7 +59,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="relative">
+      <div className={`relative`}>
         {/* Full-screen loading overlay */}
         {loading && (
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-10 bg-white text-3xl font-black text-neutral-600">
@@ -60,18 +69,30 @@ function App() {
         )}
 
         <style>
-          {`
+          {!settings.darkMode
+            ? // Light mode Color tweaks
+              `
             :root{
               --color-primary: ${`hsl(${hue}, 75%, 60%)`} ;
               --color-darker: ${`hsl(${hue}, 75%, 40%)`};
               --color-alpha: ${`hsl(${hue}, 75%, 60% , 0.1)`};
+              --color-header:${`hsl(${hue}, 75%, 60%)`};
             }
+          `
+            : // Dark Mode color tweaks
+              `
+              :root{
+              --color-primary: ${`hsl(${hue}, 75%, 40%)`} ;
+              --color-darker: ${`hsl(${hue}, 75%, 60%)`};
+              --color-alpha: ${`hsl(${hue}, 75%, 60% , 0.1)`};
+              --color-header:${`hsl(${hue}, 20%, 10%)`};
+              }
           `}
         </style>
 
         {/* Header */}
-        <div className="header bg-primary relative flex min-h-96 flex-col bg-linear-to-b px-8 py-5 pb-16 transition-all duration-200 ease-in">
-          <div className="z-10 flex items-center gap-5 text-white">
+        <div className="header bg-header relative flex min-h-96 flex-col bg-linear-to-b px-8 py-5 pb-16 transition-all duration-200 ease-in">
+          <div className="z-10 flex items-center gap-5 text-white dark:text-neutral-600">
             <div>
               <Link to={base} className="flex flex-col items-center gap-2 text-xs no-underline">
                 <BusFront size={32} />
@@ -132,6 +153,16 @@ function App() {
                   setSettings={setSettings}
                   settings={settings}
                 />
+              }
+            />
+            <Route
+              path={`${base}about`}
+              element={
+                <>
+                  {' '}
+                  <style>{css}</style>
+                  <About />
+                </>
               }
             />
             <Route

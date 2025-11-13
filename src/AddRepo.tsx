@@ -69,7 +69,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
             placeholder="نام برنامه"
             defaultValue={name || ''}
             required
-            className="grow rounded border border-zinc-500 p-3"
+            className="grow rounded border border-neutral-500 p-3"
           />
           <label htmlFor="name">نام برنامه</label>
         </div>
@@ -81,7 +81,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
             placeholder="لینک فایل اکسل"
             defaultValue={link || ''}
             required
-            className="grow rounded border border-zinc-500 p-3"
+            className="grow rounded border border-neutral-500 p-3"
           />
           <label htmlFor="name">لینک فایل</label>
         </div>
@@ -91,7 +91,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
             type="checkbox"
             name="overwrite"
             defaultChecked={overwrite || false}
-            className="h-5 w-5"
+            className="checked:bg-primary checked:border-primary size-4 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
           />
           <label htmlFor="overwrite" className="ms-2 text-gray-900">
             حذف برنامه‌های قبلی

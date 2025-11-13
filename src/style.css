@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 @font-face {
   font-family: 'Vazirmatn';
   src:
@@ -7,19 +9,44 @@
   font-display: swap;
 }
 
-@import 'tailwindcss';
 @theme {
   --color-primary: hsl(0, 75%, 60%);
   --color-darker: hsl(0, 75%, 40%);
   --color-alpha: hsl(0, 75%, 80%, 0.1);
+  --color-header: hsl(0, 75%, 60%);
   --text-x2sm: 0.6rem;
 }
+@custom-variant dark (&:where(.dark, .dark *));
 
-@utility time-box {
-  @apply rounded border border-[#00000033] bg-zinc-400 px-2 py-3 font-bold tracking-widest text-white shadow shadow-zinc-400;
+@utility dark {
+  --color-neutral-50: rgb(18 18 18);
+  --color-neutral-100: rgb(25 25 25);
+  --color-neutral-200: rgb(38 38 38);
+  --color-neutral-300: rgb(64 64 64);
+  --color-neutral-400: rgb(115 115 115);
+  --color-neutral-500: rgb(163 163 163);
+  --color-neutral-600: rgb(212 212 212);
+  --color-neutral-700: rgb(229 229 229);
+  --color-neutral-800: rgb(245 245 245);
+  --color-neutral-900: rgb(250 250 250);
+  --color-white: rgb(20, 20, 20);
+  --color-gray-50: rgb(17 17 17);
+  --color-gray-100: rgb(26 26 26);
+  --color-gray-200: rgb(38 38 38);
+  --color-gray-300: rgb(64 64 64);
+  --color-gray-400: rgb(112 112 112);
+  --color-gray-500: rgb(163 163 163);
+  --color-gray-600: rgb(200 200 200);
+  --color-gray-700: rgb(225 225 225);
+  --color-gray-800: rgb(240 240 240);
+  --color-gray-900: rgb(250 250 250);
+  --color-black: rgb(240, 240, 240);
+  color: rgb(240, 240, 240);
+  background: rgb(20, 20, 20);
 }
+
 @utility glass-button {
-  @apply m-0 rounded-lg border border-zinc-500 p-2 text-zinc-500 transition-all duration-200;
+  @apply m-0 rounded-lg border border-neutral-500 p-2 text-neutral-500 transition-all duration-200;
 }
 @utility selected {
   @apply border-primary bg-alpha text-darker;
@@ -35,7 +62,6 @@ html {
   scrollbar-gutter: stable;
   font-family: 'Vazirmatn', sans-serif;
 }
-
 .header::after {
   content: '';
   position: absolute;
@@ -44,4 +70,29 @@ html {
   width: 100%;
   height: 100%;
   background-image: linear-gradient(#0000006a, transparent);
+}
+
+.ripple::before {
+  content: '';
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  border-radius: 0.75rem;
+  z-index: -1;
+  animation: ripple cubic-bezier(0.075, 0.82, 0.165, 1) 1.5s infinite;
+}
+
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.15);
+  }
 }

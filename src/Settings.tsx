@@ -1,10 +1,9 @@
-/** biome-ignore-all lint/suspicious/noDocumentCookie: <> */
 import { Link } from 'react-router-dom'
 import Repo from './Repo'
 import type { repoType } from './xlsxLoader'
 import { defaultRepo, type SettingsType } from './App'
 import { base } from './vars'
-import About from './About'
+import { HelpCircle, Plus, RefreshCw, Trash2 } from 'lucide-react'
 
 type props = {
   repos: repoType[]
@@ -52,19 +51,6 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
         console.warn('Cache API is not supported in this browser.')
       }
 
-      // Clear all cookies
-      if (document.cookie) {
-        const cookies = document.cookie.split('; ')
-        for (const cookie of cookies) {
-          const [name] = cookie.split('=')
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${location.hostname}`
-          console.log(`Deleted cookie: ${name}`)
-        }
-      } else {
-        console.warn('Cookies are not accessible in this context.')
-      }
-
       console.log('All site data cleared!')
       window.location.href = '/'
     } catch (error) {
@@ -90,50 +76,80 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
             )
           })}
           <div className="mt-3 flex justify-center gap-4 text-sm">
-            <Link to={`${base}add`} className="glass-button selected">
+            <Link to={`${base}add`} className="glass-button selected flex items-center gap-1">
+              <Plus />
               افزودن برنامه جدید
             </Link>
-            <button type="button" className="glass-button" onClick={resetProgram}>
+            <button
+              type="button"
+              className="glass-button flex items-center gap-2"
+              onClick={resetProgram}
+            >
+              <RefreshCw />
               بازنشانی
             </button>
           </div>
         </div>
       </div>
-      <div className="rtl mb-4 flex justify-center">
-        <input
-          id="overwrite"
-          type="checkbox"
-          name="overwrite"
-          checked={settings.format24}
-          onChange={() => {
-            setSettings((old) => {
-              const newSettings = { ...old }
-              newSettings.format24 = !old.format24
-              return newSettings
-            })
-          }}
-          className="h-5 w-5"
-        />
-        <label htmlFor="overwrite" className="ms-2 text-gray-900">
-          استفاده از فرمت زمانی ۲۴ ساعته
-        </label>
+      <div className="mt-5 flex flex-col gap-3">
+        <div className="rtl flex items-center">
+          <input
+            id="overwrite"
+            type="checkbox"
+            name="overwrite"
+            checked={settings.format24}
+            onChange={() => {
+              setSettings((old) => {
+                const newSettings = { ...old }
+                newSettings.format24 = !old.format24
+                return newSettings
+              })
+            }}
+            className="checked:bg-primary checked:border-primary size-4 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
+          />
+          <label htmlFor="overwrite" className="ms-2 text-gray-900">
+            استفاده از فرمت زمانی ۲۴ ساعته
+          </label>
+        </div>
+        <div className="rtl flex items-center">
+          <input
+            id="darkMode"
+            type="checkbox"
+            name="darkMode"
+            checked={settings.darkMode}
+            onChange={() => {
+              setSettings((old) => {
+                const newSettings = { ...old }
+                console.log(old.darkMode)
+                newSettings.darkMode = old.darkMode ? !old.darkMode : true
+                return newSettings
+              })
+            }}
+            className="checked:bg-primary checked:border-primary size-4 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
+          />
+
+          <label htmlFor="darkMode" className="ms-2 text-gray-900">
+            حالت شب
+          </label>
+        </div>
       </div>
       <div className="flex flex-col gap-3">
-        <p>
-          در صورتیکه برنامه دچار مشکل شده و به درستی کار نمی‌کند می‌توانید با زدن دکمه پایین کش
-          برنامه را پاک کنید.
-        </p>
-        <p>برای لود کردن مجدد برنامه دسترسی اینترنت نیاز است.</p>
-
         <button
           type="button"
-          className="glass-button mx-auto max-w-44 text-sm"
+          className="glass-button mx-auto flex max-w-44 items-center justify-center gap-2 border-red-500 bg-[#ff000020] text-sm text-red-500"
           onClick={() => clearSiteData()}
         >
-          پاک کردن کش برنامه
+          <Trash2 />
+          بازیابی برنامه
         </button>
       </div>
-      <About />
+
+      <div className="flex flex-col gap-3">
+        <Link to={`${base}about`} className="glass-button selected flex items-center gap-3 p-5">
+          <HelpCircle />
+          راهنمای برنامه
+        </Link>
+      </div>
     </div>
   )
 }

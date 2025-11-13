@@ -107,7 +107,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
 
   return (
     <>
-      <div className="rtl flex gap-2 text-2xl font-bold text-zinc-600">
+      <div className="rtl flex gap-2 text-2xl font-bold text-neutral-600">
         <h2 className="flex h-14 flex-1 items-center justify-center rounded bg-neutral-50 p-3 text-lg">
           {timer.origin}
         </h2>
@@ -120,25 +120,21 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
       </div>
       <div className="mx-auto mt-5 max-w-sm">
         {timeIndex >= 0 ? (
-          <p className="rtl text-zinc-500">
+          <p className="rtl text-neutral-500">
             زمان باقی‌مانده: {calcRemainingTime(times[timeIndex])}
           </p>
         ) : (
-          <p className="rtl text-zinc-500">اتوبوسی پس از این زمان نیست</p>
+          <p className="rtl text-neutral-500">اتوبوسی پس از این زمان نیست</p>
         )}
         {timesManager()}
         {times.length == 0 && (
-          <p className="rtl text-zinc-500">لیستی برای این برنامه زمانی تعریف نشده است</p>
+          <p className="rtl text-neutral-500">لیستی برای این برنامه زمانی تعریف نشده است</p>
         )}
         <ul className="rtl mt-5 grid grid-cols-4 gap-3 text-sm">
           {times.map((time, index) => (
             <li
               key={time.toString()}
-              className={
-                index === timeIndex
-                  ? 'time-box bg-primary shadow-primary animate-pulse'
-                  : 'time-box'
-              }
+              className={`${index === timeIndex ? 'bg-primary shadow-primary ripple text-white' : 'bg-neutral-100 text-neutral-700 shadow-neutral-100'} relative rounded-xl px-2 py-3 font-bold tracking-widest shadow`}
             >
               {format(time)}
             </li>
