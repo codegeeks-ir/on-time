@@ -108,13 +108,13 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
   return (
     <>
       <div className="rtl flex gap-2 text-2xl font-bold text-zinc-600">
-        <h2 className="flex h-14 flex-1 items-center justify-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
+        <h2 className="flex h-14 flex-1 items-center justify-center rounded bg-neutral-50 p-3 text-lg">
           {timer.origin}
         </h2>
-        <h2 className="flexjustify-center h-14 items-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
+        <h2 className="flexjustify-center h-14 items-center rounded bg-neutral-50 p-3 text-lg">
           به
         </h2>
-        <h2 className="flexjustify-center h-14 flex-1 items-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
+        <h2 className="flexjustify-center items-cente roundedr h-14 flex-1 bg-neutral-50 p-3 text-lg">
           {timer.destiny}
         </h2>
       </div>
@@ -146,7 +146,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
         </ul>
         {timer.comment && (
           <div className="rtl mt-8 text-right leading-5 text-neutral-600">
-            <span className="font-bold">یادداشت‌ها:&nbsp; </span>
+            <span className="text-darker font-bold">یادداشت‌ها:&nbsp; </span>
             {timer.comment.split('\n').map((comment, index) => (
               <p key={comment} className="mt-2">
                 {comment}
