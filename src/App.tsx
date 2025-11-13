@@ -1,5 +1,4 @@
 // TODO: better error handling and loading management
-// TODO: use custom hooks for storing persistent data (like settings and repos) for better readability
 
 import { useState, useMemo } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
@@ -12,6 +11,7 @@ import { loadTimes, type repoType, type scheduleType } from './xlsxLoader'
 import AddRepo from './AddRepo'
 import { base } from './vars'
 import { BusFront, Settings as SettingsIcon } from 'lucide-react'
+import useLocalStorage from './useLocalStorage'
 export const defaultRepo = [
   {
     name: 'دانشگاه صنعتی ارومیه',
@@ -29,23 +29,10 @@ const defaultSettings = {
 
 function App() {
   const [times, setTimes] = useState<scheduleType[]>([])
-  const [activeTimer, setactiveTimer] = useState(0)
+  const [activeTimer, setactiveTimer] = useLocalStorage<number>('timer', 0)
 
-  const [repos, setrepos] = useState((): repoType[] => {
-    const data = localStorage.getItem('repos')
-    if (data) {
-      return JSON.parse(data)
-    }
-    return defaultRepo
-  })
-
-  const [settings, setSettings] = useState((): SettingsType => {
-    const data = localStorage.getItem('settings')
-    if (data) {
-      return JSON.parse(data)
-    }
-    return defaultSettings
-  })
+  const [repos, setrepos] = useLocalStorage<repoType[]>('repos', defaultRepo)
+  const [settings, setSettings] = useLocalStorage<SettingsType>('settings', defaultSettings)
 
   const hue = useMemo(() => {
     if (times.length > 0) return Math.round((activeTimer / times.length) * 360)
@@ -57,14 +44,8 @@ function App() {
       const data = await loadTimes(repos)
       setTimes(data)
     }
-    localStorage.setItem('repos', JSON.stringify(repos))
     load()
-    setactiveTimer(0)
   }, [repos])
-
-  useEffect(() => {
-    localStorage.setItem('settings', JSON.stringify(settings))
-  }, [settings])
 
   const css = `.header{min-height:100px;!important}`
   return (
