@@ -74,12 +74,13 @@ function App() {
         <style>
           {`
               :root{
-              --primary: ${`${hue}, 75%, 60%`} ;
-              --darker: ${`${hue}, 75%, 40%`} ;
+                --color-primary: ${`hsl(${hue}, 75%, 60%)`} ;
+                --color-darker: ${`hsl(${hue}, 75%, 40%)`};
+                --color-alpha: ${`hsl(${hue}, 75%, 60% , 0.1)`};
               }
             `}
         </style>
-        <div className="header relative flex min-h-96 flex-col bg-primary bg-gradient-to-b px-8 py-5 pb-16 transition duration-200 ease-in">
+        <div className="header bg-primary relative flex min-h-96 flex-col bg-gradient-to-b px-8 py-5 pb-16 transition duration-200 ease-in">
           <div className="z-10 flex items-center gap-5 text-white">
             <div>
               <Link to={base} className="flex flex-col items-center gap-2 text-xs no-underline">

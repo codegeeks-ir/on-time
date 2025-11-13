@@ -90,12 +90,12 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
   const destinationsForSelectedOrigin = selectedOrigin ? (tree.get(selectedOrigin) ?? []) : []
 
   return (
-    <div className="rtl z-10 mx-auto mt-5 flex w-full max-w-screen-sm flex-col items-center justify-around gap-5 rounded-xl bg-white p-5 text-sm">
+    <div className="rtl z-10 mx-auto mt-5 flex w-full max-w-screen-sm flex-col items-center justify-around gap-5 rounded bg-white p-5 text-sm">
       <div className="flex w-full flex-col gap-3">
         <div className="flex-1">
           <label className="mb-1 block text-xs text-gray-500">مبدا</label>
           <select
-            className="mt-1 block w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-offset-1"
+            className="mt-1 block w-full rounded-lg border p-2 focus:ring-2 focus:ring-offset-1 focus:outline-none"
             value={selectedOrigin}
             onChange={handleOriginChange}
             disabled={hasNoData}
@@ -122,7 +122,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
         <div className="flex-1">
           <label className="mb-1 block text-xs text-gray-500">مقصد</label>
           <select
-            className="mt-1 block w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-offset-1"
+            className="mt-1 block w-full rounded-lg border p-2 focus:ring-2 focus:ring-offset-1 focus:outline-none"
             value={selectedScheduleId ?? ''}
             onChange={handleDestinationChange}
             disabled={hasNoData || !selectedOrigin}

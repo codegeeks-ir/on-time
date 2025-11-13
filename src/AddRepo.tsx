@@ -42,7 +42,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
   }
   return (
     <div className="mx-auto max-w-screen-md">
-      <h1 className="border-b border-primary text-2xl font-bold text-primary">
+      <h1 className="border-primary text-primary border-b text-2xl font-bold">
         افزودن برنامه جدید
       </h1>
       <div className="rtl mt-5 text-justify">

@@ -7,7 +7,7 @@ export type scheduleType = {
     name: string
     times: string[]
   }[]
-  comment?: string  
+  comment?: string
 }
 
 export type repoType = {
@@ -49,17 +49,15 @@ export async function loadTimes(repos: repoType[]) {
                 const target = data[cellIndex + offset]
                 if (target) {
                   // append or set the comment field
-                  target.comment = (target.comment ? target.comment + '\n' : '') + cellValue.slice(1).trim()
+                  target.comment =
+                    (target.comment ? target.comment + '\n' : '') + cellValue.slice(1).trim()
                 }
                 return
               }
 
               if (rowIndex === 0) {
                 // header cell: create a schedule entry
-                const destiny =
-                  cellIndex % 2 === 0
-                    ? rowArr[cellIndex + 1]
-                    : rowArr[cellIndex - 1]
+                const destiny = cellIndex % 2 === 0 ? rowArr[cellIndex + 1] : rowArr[cellIndex - 1]
                 data.push({
                   origin: cellValue,
                   destiny: (destiny || '').trim(),
@@ -100,9 +98,8 @@ export async function loadTimes(repos: repoType[]) {
         (base) => base.origin === title && base.destiny === (destinyTitle || item.destiny)
       )
 
-      const subsTimes = item.subSchedule && item.subSchedule[0]?.times
-        ? item.subSchedule[0].times
-        : []
+      const subsTimes =
+        item.subSchedule && item.subSchedule[0]?.times ? item.subSchedule[0].times : []
 
       if (parentIndex !== -1) {
         result[parentIndex].subSchedule.push({
@@ -127,9 +124,10 @@ export async function loadTimes(repos: repoType[]) {
         })
       }
     } else {
-      const safeSub = item.subSchedule && item.subSchedule.length > 0
-        ? item.subSchedule
-        : [{ name: 'پیشفرض', times: [] }]
+      const safeSub =
+        item.subSchedule && item.subSchedule.length > 0
+          ? item.subSchedule
+          : [{ name: 'پیشفرض', times: [] }]
 
       result.push({
         origin: item.origin,

@@ -1,3 +1,43 @@
+@import 'tailwindcss';
+@theme {
+  --color-primary: hsl(0, 75%, 60%);
+  --color-darker: hsl(0, 75%, 40%);
+  --color-alpha: hsl(0, 75%, 80%, 0.1);
+  --text-x2sm: 0.6rem;
+}
+
+@utility time-box {
+  @apply rounded border border-[#00000033] bg-zinc-400 px-2 py-3 font-bold tracking-widest text-white shadow shadow-zinc-400;
+}
+@utility glass-button {
+  @apply m-0 rounded-lg border border-zinc-500 p-2 text-zinc-500 transition-all duration-200;
+}
+@utility selected {
+  @apply border-primary bg-alpha text-darker;
+}
+
+.rtl {
+  direction: rtl;
+}
+.ltr {
+  direction: ltr;
+}
+
+html {
+  scrollbar-gutter: stable;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(#0000006a, transparent);
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.3s;
@@ -40,44 +80,4 @@
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-}
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@layer components {
-  .time-box {
-    @apply rounded-xl border border-[#00000033] bg-zinc-400 px-2 py-3 font-bold tracking-widest text-white shadow shadow-zinc-400;
-  }
-  .glass-button {
-    @apply m-0 rounded-lg border border-zinc-500 p-2 text-zinc-500 transition-all duration-200;
-  }
-  .selected {
-    @apply border-primary bg-alpha text-darker;
-  }
-}
-
-.rtl {
-  direction: rtl;
-}
-.ltr {
-  direction: ltr;
-}
-:root {
-  --primary: 0, 75%, 60%;
-  --darker: 0, 75%, 80%`;
-}
-html {
-  scrollbar-gutter: stable;
-  font-family: 'Vazirmatn', sans-serif;
-}
-
-.header::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(#0000006a, transparent);
 }

@@ -97,7 +97,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
           {hour > 12
             ? `${hour - 12}:${String(min).padStart(2, '0')}`
             : `${hour}:${String(min).padStart(2, '0')}`}
-          <span className="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-5 text-x2sm opacity-50">
+          <span className="text-x2sm absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-5 opacity-50">
             {hour > 12 ? 'ب.ظ' : 'ق.ظ'}
           </span>
         </span>
@@ -142,7 +142,7 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
               key={time.toString()}
               className={
                 index === timeIndex
-                  ? 'time-box animate-pulse bg-primary shadow-primary'
+                  ? 'time-box bg-primary shadow-primary animate-pulse'
                   : 'time-box'
               }
             >

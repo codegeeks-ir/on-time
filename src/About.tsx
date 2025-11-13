@@ -3,7 +3,7 @@ import { base, origin } from './vars'
 const About = () => {
   return (
     <div className="rtl text-right leading-8">
-      <h1 className="mb-5 border-b border-primary text-center text-2xl font-bold text-primary">
+      <h1 className="border-primary text-primary mb-5 border-b text-center text-2xl font-bold">
         راهنما
       </h1>
       <p>
