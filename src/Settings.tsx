@@ -73,7 +73,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
   }
 
   return (
-    <div className="rtl mx-auto flex max-w-screen-md flex-col gap-6">
+    <div className="rtl mx-auto flex max-w-3xl flex-col gap-6">
       <h1 className="border-primary text-primary border-b text-2xl font-bold">تنظیمات</h1>
       <div className="flex flex-col gap-5">
         <h2>برنامه‌های زمانی فعال:</h2>

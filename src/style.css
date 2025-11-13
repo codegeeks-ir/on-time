@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Vazirmatn';
+  src:
+    url('fonts/Vazirmatn[wght].woff2') format('woff2-variations'),
+    url('fonts/Vazirmatn[wght].woff2') format('woff2') tech('variations');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 @import 'tailwindcss';
 @theme {
   --color-primary: hsl(0, 75%, 60%);
@@ -35,14 +44,4 @@ html {
   width: 100%;
   height: 100%;
   background-image: linear-gradient(#0000006a, transparent);
-}
-
-@font-face {
-  font-family: 'Vazirmatn';
-  src:
-    url('fonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
-    url('fonts/Vazirmatn[wght].woff2') format('woff2-variations');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
 }

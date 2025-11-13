@@ -41,7 +41,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
     }
   }
   return (
-    <div className="mx-auto max-w-screen-md">
+    <div className="mx-auto max-w-3xl">
       <h1 className="border-primary text-primary border-b text-2xl font-bold">
         افزودن برنامه جدید
       </h1>
@@ -69,7 +69,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
             placeholder="نام برنامه"
             defaultValue={name || ''}
             required
-            className="flex-grow rounded border border-zinc-500 p-3"
+            className="grow rounded border border-zinc-500 p-3"
           />
           <label htmlFor="name">نام برنامه</label>
         </div>
@@ -81,7 +81,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
             placeholder="لینک فایل اکسل"
             defaultValue={link || ''}
             required
-            className="flex-grow rounded border border-zinc-500 p-3"
+            className="grow rounded border border-zinc-500 p-3"
           />
           <label htmlFor="name">لینک فایل</label>
         </div>

@@ -86,9 +86,9 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     <div className="rtl z-10 mx-auto mt-5 flex w-full max-w-screen-sm flex-col items-center justify-around gap-5 rounded bg-white p-5 text-sm">
       <div className="flex w-full flex-col gap-3">
         <div className="flex-1">
-          <label className="mb-1 block text-xs text-gray-500">مبدا</label>
+          <label className="mb-1 block text-sm text-gray-500">مبدا</label>
           <select
-            className="mt-1 block w-full rounded-lg border p-2 focus:ring-2 focus:ring-offset-1 focus:outline-none"
+            className="mt-1 block w-full rounded-lg border bg-neutral-50 p-3 focus:outline-1"
             value={selectedOrigin}
             onChange={handleOriginChange}
             disabled={hasNoData}
@@ -105,7 +105,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
         <button
           type="button"
           onClick={handleReverse}
-          className="selected mt-2 flex justify-center rounded-md border p-3"
+          className="selected mt-2 flex justify-center rounded-md border p-4"
           title="تعویض مبدا با مقصد"
         >
           <ArrowUpDown size={18} /> &nbsp;
@@ -113,9 +113,9 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
         </button>
 
         <div className="flex-1">
-          <label className="mb-1 block text-xs text-gray-500">مقصد</label>
+          <label className="mb-1 block text-sm text-gray-500">مقصد</label>
           <select
-            className="mt-1 block w-full rounded-lg border p-2 focus:ring-2 focus:ring-offset-1 focus:outline-none"
+            className="mt-1 block w-full rounded-lg border bg-neutral-50 p-3 focus:outline-1"
             value={selectedScheduleId ?? ''}
             onChange={handleDestinationChange}
             disabled={hasNoData || !selectedOrigin}

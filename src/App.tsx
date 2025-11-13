@@ -1,66 +1,76 @@
-// TODO: better error handling and loading management
-
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Timer from './Timer'
 import './style.css'
 import Settings from './Settings'
-import { useEffect } from 'react'
 import SelectLocation from './SelectLocation'
-import { loadTimes, type repoType, type scheduleType } from './xlsxLoader'
 import AddRepo from './AddRepo'
+import { loadTimes, type repoType, type scheduleType } from './xlsxLoader'
+import useLocalStorage from './useLocalStorage'
 import { base } from './vars'
 import { BusFront, Settings as SettingsIcon } from 'lucide-react'
-import useLocalStorage from './useLocalStorage'
-export const defaultRepo = [
-  {
-    name: 'دانشگاه صنعتی ارومیه',
-    link: './UUT-BUS.xlsx',
-  },
-]
 
-export type SettingsType = {
-  format24: boolean
-}
-
-const defaultSettings = {
-  format24: false,
-} as SettingsType
+export const defaultRepo = [{ name: 'دانشگاه صنعتی ارومیه', link: './UUT-BUS.xlsx' }]
+export type SettingsType = { format24: boolean }
+const defaultSettings: SettingsType = { format24: false }
 
 function App() {
   const [times, setTimes] = useState<scheduleType[]>([])
-  const [activeTimer, setactiveTimer] = useLocalStorage<number>('timer', 0)
-
-  const [repos, setrepos] = useLocalStorage<repoType[]>('repos', defaultRepo)
+  const [prevTimes, setPrevTimes] = useState<scheduleType[]>([])
+  const [activeTimer, setActiveTimer] = useLocalStorage<number>('timer', 0)
+  const [repos, setRepos] = useLocalStorage<repoType[]>('repos', defaultRepo)
   const [settings, setSettings] = useLocalStorage<SettingsType>('settings', defaultSettings)
+  const [loading, setLoading] = useState(true)
 
-  const hue = useMemo(() => {
-    if (times.length > 0) return Math.round((activeTimer / times.length) * 360)
-    else return 0
-  }, [activeTimer, times.length])
+  const hue = useMemo(
+    () => (times.length > 0 ? Math.round((activeTimer / times.length) * 360) : 0),
+    [activeTimer, times.length]
+  )
 
   useEffect(() => {
+    setLoading(true)
+    const minDelay = 500
+    const startTime = Date.now()
+
     async function load() {
       const data = await loadTimes(repos)
+      const elapsed = Date.now() - startTime
+      const remaining = minDelay - elapsed
+      setPrevTimes(times)
       setTimes(data)
+      setTimeout(() => setLoading(false), remaining > 0 ? remaining : 0)
     }
+
     load()
   }, [repos])
 
   const css = `.header{min-height:100px;!important}`
+
+  const displayTimes = loading ? prevTimes : times
+
   return (
     <BrowserRouter>
-      <div>
+      <div className="relative">
+        {/* Full-screen loading overlay */}
+        {loading && (
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-10 bg-white text-3xl font-black text-neutral-600">
+            <div className="size-24 animate-spin rounded-full border-8 border-neutral-600 border-t-transparent"></div>
+            <span>در حال بارگیری</span>
+          </div>
+        )}
+
         <style>
           {`
-              :root{
-                --color-primary: ${`hsl(${hue}, 75%, 60%)`} ;
-                --color-darker: ${`hsl(${hue}, 75%, 40%)`};
-                --color-alpha: ${`hsl(${hue}, 75%, 60% , 0.1)`};
-              }
-            `}
+            :root{
+              --color-primary: ${`hsl(${hue}, 75%, 60%)`} ;
+              --color-darker: ${`hsl(${hue}, 75%, 40%)`};
+              --color-alpha: ${`hsl(${hue}, 75%, 60% , 0.1)`};
+            }
+          `}
         </style>
-        <div className="header bg-primary relative flex min-h-96 flex-col bg-linear-to-b px-8 py-5 pb-16 transition duration-200 ease-in">
+
+        {/* Header */}
+        <div className="header bg-primary relative flex min-h-96 flex-col bg-linear-to-b px-8 py-5 pb-16 transition-all duration-200 ease-in">
           <div className="z-10 flex items-center gap-5 text-white">
             <div>
               <Link to={base} className="flex flex-col items-center gap-2 text-xs no-underline">
@@ -68,7 +78,6 @@ function App() {
                 <h1 className="font-bold">صفحه اصلی</h1>
               </Link>
             </div>
-
             <div className="ml-auto">
               <Link
                 to={`${base}settings`}
@@ -84,9 +93,9 @@ function App() {
               path={base}
               element={
                 <SelectLocation
-                  times={times}
+                  times={displayTimes}
                   activeTimer={activeTimer}
-                  setActiveTimer={setactiveTimer}
+                  setActiveTimer={setActiveTimer}
                 />
               }
             />
@@ -100,15 +109,17 @@ function App() {
             />
           </Routes>
         </div>
-        <div className="min-h-80 -translate-y-7 rounded-3xl bg-white p-8 pb-16 text-center">
+
+        {/* Main content */}
+        <div className="min-h-80 -translate-y-7 rounded-3xl bg-white p-8 pb-16 text-center transition-all duration-200 ease-in">
           <Routes>
             <Route
               path={base}
               element={
-                times && times.length > 0 ? (
-                  <Timer timer={times[activeTimer]} format24={settings.format24} />
+                displayTimes.length > 0 ? (
+                  <Timer timer={displayTimes[activeTimer]} format24={settings.format24} />
                 ) : (
-                  <h2>برنامه‌ای برای نمایش وجود ندارد</h2>
+                  <p>Loading schedules...</p>
                 )
               }
             />
@@ -117,7 +128,7 @@ function App() {
               element={
                 <Settings
                   repos={repos}
-                  setRepos={setrepos}
+                  setRepos={setRepos}
                   setSettings={setSettings}
                   settings={settings}
                 />
@@ -127,9 +138,8 @@ function App() {
               path={`${base}add`}
               element={
                 <>
-                  {' '}
                   <style>{css}</style>
-                  <AddRepo repos={repos} setRepos={setrepos} />
+                  <AddRepo repos={repos} setRepos={setRepos} />
                 </>
               }
             />

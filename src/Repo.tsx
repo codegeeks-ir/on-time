@@ -20,7 +20,7 @@ export default function Repo({ name, link, remove, disabled }: props) {
         type="text"
         value={link}
         readOnly
-        className="ltr flex-grow overflow-hidden rounded p-2"
+        className="ltr grow overflow-hidden rounded bg-neutral-50 p-3"
       />
       <div className="flex gap-2">
         <button
