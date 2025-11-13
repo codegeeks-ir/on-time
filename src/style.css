@@ -1,3 +1,37 @@
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(origin),
+::view-transition-old(destination) {
+  animation: fade-out 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+::view-transition-new(origin),
+::view-transition-new(destination) {
+  animation: fade-in 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
 @font-face {
   font-family: 'Vazirmatn';
   src:

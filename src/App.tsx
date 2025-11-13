@@ -12,6 +12,7 @@ import { loadTimes, type repoType, type scheduleType } from './xlsxLoader'
 import AddRepo from './AddRepo'
 import { base } from './vars'
 import { BusFront, Settings as SettingsIcon } from 'lucide-react'
+import { startTransition } from './startTransition'
 export const defaultRepo = [
   {
     name: 'دانشگاه صنعتی ارومیه',
@@ -66,7 +67,7 @@ function App() {
     localStorage.setItem('settings', JSON.stringify(settings))
   }, [settings])
 
-  const css = `.header{min-height:100px;!important}`
+  const css = `.header{min-height:100px;!important;view-transition-name:header;}`
   return (
     <BrowserRouter>
       <div>

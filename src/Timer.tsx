@@ -107,7 +107,23 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
 
   return (
     <>
-      <h2 className="text-2xl font-extrabold text-zinc-600">{`${timer.origin} به ${timer.destiny}`}</h2>
+      <div className="rtl flex gap-2 text-2xl font-bold text-zinc-600">
+        <h2
+          className="flex h-14 flex-1 items-center justify-center border bg-neutral-50 p-3 text-lg"
+          style={{ viewTransitionName: 'origin' }}
+        >
+          {timer.origin}
+        </h2>
+        <h2 className="flexjustify-center h-14 items-center border bg-neutral-50 p-3 text-lg">
+          به
+        </h2>
+        <h2
+          className="flexjustify-center h-14 flex-1 items-center border bg-neutral-50 p-3 text-lg"
+          style={{ viewTransitionName: 'destination' }}
+        >
+          {timer.destiny}
+        </h2>
+      </div>
       <div className="mx-auto mt-5 max-w-sm">
         {timeIndex >= 0 ? (
           <p className="rtl text-zinc-500">
@@ -134,7 +150,16 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
             </li>
           ))}
         </ul>
-                {timer.comment && <p className='rtl mt-10 text-neutral-600 leading-loose'><span className='font-bold'>یادداشت:&nbsp; </span>{timer.comment}</p>}
+        {timer.comment && (
+          <div className="rtl mt-8 text-right leading-5 text-neutral-600">
+            <span className="font-bold">یادداشت‌ها:&nbsp; </span>
+            {timer.comment.split('\n').map((comment, index) => (
+              <p key={comment} className="mt-2">
+                {comment}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </>
   )

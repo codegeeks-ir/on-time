@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import type { scheduleType } from './xlsxLoader'
 import { ArrowUpDown } from 'lucide-react'
+import { startTransition } from './startTransition'
 type Props = {
   times: scheduleType[]
   activeTimer: number
@@ -47,7 +48,9 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     const leaves = tree.get(origin) ?? []
     if (leaves.length) {
       setSelectedScheduleId(leaves[0].id)
-      setActiveTimer(leaves[0].id)
+      startTransition(() => {
+        setActiveTimer(leaves[0].id)
+      })
     } else {
       setSelectedScheduleId(null)
     }
@@ -57,7 +60,9 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     const raw = e.target.value
     const id = raw === '' ? null : Number(raw)
     setSelectedScheduleId(id)
-    if (id != null) setActiveTimer(id)
+    startTransition(() => {
+      if (id != null) setActiveTimer(id)
+    })
   }
 
   function handleReverse() {
@@ -70,7 +75,9 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     if (found !== -1) {
       setSelectedOrigin(times[found].origin)
       setSelectedScheduleId(found)
-      setActiveTimer(found)
+      startTransition(() => {
+        setActiveTimer(found)
+      })
       return
     }
 
