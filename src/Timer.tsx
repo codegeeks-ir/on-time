@@ -108,19 +108,13 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
   return (
     <>
       <div className="rtl flex gap-2 text-2xl font-bold text-zinc-600">
-        <h2
-          className="flex h-14 flex-1 items-center justify-center border bg-neutral-50 p-3 text-lg"
-          style={{ viewTransitionName: 'origin' }}
-        >
+        <h2 className="flex h-14 flex-1 items-center justify-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
           {timer.origin}
         </h2>
-        <h2 className="flexjustify-center h-14 items-center border bg-neutral-50 p-3 text-lg">
+        <h2 className="flexjustify-center h-14 items-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
           به
         </h2>
-        <h2
-          className="flexjustify-center h-14 flex-1 items-center border bg-neutral-50 p-3 text-lg"
-          style={{ viewTransitionName: 'destination' }}
-        >
+        <h2 className="flexjustify-center h-14 flex-1 items-center border border-neutral-300 bg-neutral-50 p-3 text-lg">
           {timer.destiny}
         </h2>
       </div>

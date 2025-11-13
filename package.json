@@ -13,8 +13,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
     "lucide-react": "^0.553.0",
-    "react": "19.3.0-canary-1ea46df8-20251111",
-    "react-dom": "19.3.0-canary-1ea46df8-20251111",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "react-router-dom": "^7.9.5",
     "xlsx": "^0.18.5"
   },

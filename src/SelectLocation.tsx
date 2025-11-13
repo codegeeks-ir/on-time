@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import type { scheduleType } from './xlsxLoader'
 import { ArrowUpDown } from 'lucide-react'
-import { startTransition } from './startTransition'
 type Props = {
   times: scheduleType[]
   activeTimer: number
@@ -48,9 +47,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     const leaves = tree.get(origin) ?? []
     if (leaves.length) {
       setSelectedScheduleId(leaves[0].id)
-      startTransition(() => {
-        setActiveTimer(leaves[0].id)
-      })
+      setActiveTimer(leaves[0].id)
     } else {
       setSelectedScheduleId(null)
     }
@@ -60,9 +57,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     const raw = e.target.value
     const id = raw === '' ? null : Number(raw)
     setSelectedScheduleId(id)
-    startTransition(() => {
-      if (id != null) setActiveTimer(id)
-    })
+    if (id != null) setActiveTimer(id)
   }
 
   function handleReverse() {
@@ -75,9 +70,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
     if (found !== -1) {
       setSelectedOrigin(times[found].origin)
       setSelectedScheduleId(found)
-      startTransition(() => {
-        setActiveTimer(found)
-      })
+      setActiveTimer(found)
       return
     }
 
@@ -113,10 +106,10 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
           type="button"
           onClick={handleReverse}
           className="selected mt-2 flex justify-center rounded-md border p-3"
-          title="تغییر مبدا با مقصد"
+          title="تعویض مبدا با مقصد"
         >
           <ArrowUpDown size={18} /> &nbsp;
-          <span>تغییر مبدا با مقصد</span>
+          <span>تعویض مبدا با مقصد</span>
         </button>
 
         <div className="flex-1">
