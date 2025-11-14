@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react'
 import type { scheduleType } from './xlsxLoader'
+import { LucideClockAlert, MapPinX } from 'lucide-react'
+import Counter from './Counter'
 function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) {
   const [current, setCurrent] = useState(new Date())
   const [timeIndex, setTimeIndex] = useState(0)
@@ -34,26 +36,22 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
     [times]
   )
 
-  const calcRemainingTime = useCallback(
-    (time: string) => {
-      if (!time) return
-      const [hour, min] = time.split(':').map((item) => parseInt(item, 10))
-      const currentInt =
-        current.getHours() * 3600 + current.getMinutes() * 60 + current.getSeconds()
-      const target = hour * 3600 + min * 60
-      const remainingTime = target - currentInt
-      const remainingHour = Math.floor(remainingTime / 3600)
-      Math.floor(remainingTime / 3600)
-      if (currentInt >= target) return 'PASS'
-      if (remainingHour > 0) {
-        return 'بیشتر از یک ساعت'
-      }
-      return `${remainingHour > 0 ? `${remainingHour} ساعت،` : ''} ${Math.floor(
-        (remainingTime % 3600) / 60
-      )} دقیقه، ${Math.floor((remainingTime % 3600) % 60)} ثانیه`
-    },
-    [current]
-  )
+  const RemainingTime = useMemo(() => {
+    if (timeIndex < 0 || times[timeIndex] == null) return { hour: 0, min: 0, sec: 0 }
+    const time = times[timeIndex]
+    const [hour, min] = time.split(':').map((item) => parseInt(item, 10))
+    const currentInt = current.getHours() * 3600 + current.getMinutes() * 60 + current.getSeconds()
+    const target = hour * 3600 + min * 60
+    const totalTime = target - currentInt
+    const remainingHour = Math.floor(totalTime / 3600)
+    const remainingMin = Math.floor((totalTime % 3600) / 60)
+    const remainingSec = Math.floor((totalTime % 3600) % 60)
+    return {
+      hour: remainingHour,
+      min: remainingMin,
+      sec: remainingSec,
+    }
+  }, [times, timeIndex, current])
 
   // Effect to update `current` every second without affecting the parent component
   useEffect(() => {
@@ -108,27 +106,61 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
   return (
     <>
       <div className="rtl flex gap-2 text-2xl font-bold text-neutral-600">
-        <h2 className="flex h-14 flex-1 items-center justify-center rounded bg-neutral-50 p-3 text-lg">
+        <h2 className="flex h-14 flex-1 items-center justify-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
           {timer.origin}
         </h2>
-        <h2 className="flexjustify-center h-14 items-center rounded bg-neutral-50 p-3 text-lg">
+        <h2 className="flexjustify-center h-14 items-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
           به
         </h2>
-        <h2 className="flexjustify-center items-cente roundedr h-14 flex-1 bg-neutral-50 p-3 text-lg">
+        <h2 className="flexjustify-center items-cente roundedr h-14 flex-1 bg-neutral-50 p-3 text-lg font-black tracking-wide">
           {timer.destiny}
         </h2>
       </div>
-      <div className="mx-auto mt-5 max-w-sm">
+      <div className="mx-auto mt-4 max-w-md">
         {timeIndex >= 0 ? (
-          <p className="rtl text-neutral-500">
-            زمان باقی‌مانده: {calcRemainingTime(times[timeIndex])}
-          </p>
+          <div className="flex flex-col items-center justify-center gap-1 rounded bg-neutral-50 p-5 text-neutral-600">
+            <span className="rtl font-bold">زمان باقی مانده:</span>
+            <div className="flex items-center justify-center gap-1">
+              <LucideClockAlert size={24} />
+
+              <Counter
+                value={RemainingTime.hour}
+                places={[10, 1]}
+                fontSize={24}
+                fontWeight={'900'}
+              />
+              <span className="text-4xl">:</span>
+              <Counter
+                value={RemainingTime.min}
+                places={[10, 1]}
+                fontSize={24}
+                fontWeight={'900'}
+              />
+              <span className="text-4xl">:</span>
+              <Counter
+                value={RemainingTime.sec}
+                places={[10, 1]}
+                fontSize={24}
+                fontWeight={'900'}
+              />
+            </div>
+
+            <div className="rtl flex gap-2"></div>
+          </div>
         ) : (
-          <p className="rtl text-neutral-500">اتوبوسی پس از این زمان نیست</p>
+          times.length > 0 && (
+            <div className="rtl flex flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-5 font-bold text-neutral-600">
+              <MapPinX size={48} />
+              <p>اتوبوسی پس از این زمان نیست!</p>
+            </div>
+          )
         )}
         {timesManager()}
         {times.length == 0 && (
-          <p className="rtl text-neutral-500">لیستی برای این برنامه زمانی تعریف نشده است</p>
+          <div className="rtl flex flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-5 font-bold text-neutral-600">
+            <MapPinX size={48} />
+            <p>لیستی برای این برنامه زمانی تعریف نشده است!</p>
+          </div>
         )}
         <ul className="rtl mt-5 grid grid-cols-4 gap-3 text-sm">
           {times.map((time, index) => (

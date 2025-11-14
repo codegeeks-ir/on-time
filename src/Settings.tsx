@@ -58,7 +58,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
           </div>
         </div>
       </div>
-      <div className="mt-5 flex flex-col gap-3">
+      <div className="mt-5 flex flex-col gap-4 text-lg">
         <div className="rtl flex items-center">
           <input
             id="overwrite"
