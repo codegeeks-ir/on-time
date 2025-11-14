@@ -25,39 +25,6 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
     if (RuSureAboutDat) setRepos(defaultRepo)
   }
 
-  async function clearSiteData() {
-    try {
-      // Clear all IndexedDB databases
-      if (window.indexedDB) {
-        const databases = await indexedDB.databases()
-        for (const db of databases) {
-          if (db.name) {
-            indexedDB.deleteDatabase(db.name)
-            console.log(`Deleted IndexedDB database: ${db.name}`)
-          }
-        }
-      } else {
-        console.warn('IndexedDB is not supported in this browser.')
-      }
-
-      // Clear all caches
-      if (window.caches) {
-        const cacheKeys = await caches.keys()
-        for (const cacheKey of cacheKeys) {
-          await caches.delete(cacheKey)
-          console.log(`Deleted cache: ${cacheKey}`)
-        }
-      } else {
-        console.warn('Cache API is not supported in this browser.')
-      }
-
-      console.log('All site data cleared!')
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Error clearing site data:', error)
-    }
-  }
-
   return (
     <div className="rtl mx-auto flex max-w-3xl flex-col gap-6">
       <h1 className="border-primary text-primary border-b text-2xl font-bold">تنظیمات</h1>
@@ -132,16 +99,6 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
             حالت شب
           </label>
         </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          className="glass-button mx-auto flex max-w-44 items-center justify-center gap-2 border-red-500 bg-[#ff000020] text-sm text-red-500"
-          onClick={() => clearSiteData()}
-        >
-          <Trash2 />
-          بازیابی برنامه
-        </button>
       </div>
 
       <div className="flex flex-col gap-3">
