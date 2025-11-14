@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react'
 import type { scheduleType } from './xlsxLoader'
-import { LucideClockAlert, MapPinX } from 'lucide-react'
-import Counter from './Counter'
+import { AnimatePresence, motion } from 'motion/react'
+import TimeList from './TimeList'
+import RemainingBox from './RemainingBox'
 function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) {
   const [current, setCurrent] = useState(new Date())
   const [timeIndex, setTimeIndex] = useState(0)
@@ -86,101 +87,58 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
     }
   }
 
-  function format(time: string) {
-    if (format24) return time
-    else {
-      const [hour, min] = time.split(':').map((item) => parseInt(item, 10))
-      return (
-        <span className="relative">
-          {hour > 12
-            ? `${hour - 12}:${String(min).padStart(2, '0')}`
-            : `${hour}:${String(min).padStart(2, '0')}`}
-          <span className="text-x2sm absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-5 opacity-50">
-            {hour > 12 ? 'ب.ظ' : 'ق.ظ'}
-          </span>
-        </span>
-      )
-    }
-  }
-
   return (
     <>
       <div className="rtl flex gap-2 text-2xl font-bold text-neutral-600">
-        <h2 className="flex h-14 flex-1 items-center justify-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
-          {timer.origin}
-        </h2>
-        <h2 className="flexjustify-center h-14 items-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
-          به
-        </h2>
-        <h2 className="flexjustify-center items-cente roundedr h-14 flex-1 bg-neutral-50 p-3 text-lg font-black tracking-wide">
-          {timer.destiny}
-        </h2>
+        <div className="items-cente roundedr flex h-14 flex-1 justify-center overflow-hidden bg-neutral-50 p-3 text-lg font-black tracking-wide">
+          <AnimatePresence mode="wait">
+            <motion.h2
+              initial={{ marginTop: '-50px', opacity: 0 }}
+              animate={{ marginTop: 0, opacity: 1 }}
+              exit={{ marginTop: '50px', opacity: 0 }}
+              key={timer.origin}
+            >
+              {timer.origin}
+            </motion.h2>
+          </AnimatePresence>
+        </div>
+        <div className="flex h-14 items-center justify-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
+          <h2>به</h2>
+        </div>
+        <div className="flex h-14 flex-1 items-center justify-center overflow-hidden rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
+          <AnimatePresence mode="wait">
+            <motion.h2
+              initial={{ marginTop: '-50px', opacity: 0 }}
+              animate={{ marginTop: 0, opacity: 1 }}
+              exit={{ marginTop: '50px', opacity: 0 }}
+              key={timer.destiny}
+            >
+              {timer.destiny}
+            </motion.h2>
+          </AnimatePresence>
+        </div>
       </div>
       <div className="mx-auto mt-4 max-w-md">
-        {timeIndex >= 0 ? (
-          <div className="flex flex-col items-center justify-center gap-1 rounded bg-neutral-50 p-5 text-neutral-600">
-            <span className="rtl font-bold">زمان باقی مانده:</span>
-            <div className="flex items-center justify-center gap-1">
-              <LucideClockAlert size={24} />
-
-              <Counter
-                value={RemainingTime.hour}
-                places={[10, 1]}
-                fontSize={24}
-                fontWeight={'900'}
-              />
-              <span className="text-4xl">:</span>
-              <Counter
-                value={RemainingTime.min}
-                places={[10, 1]}
-                fontSize={24}
-                fontWeight={'900'}
-              />
-              <span className="text-4xl">:</span>
-              <Counter
-                value={RemainingTime.sec}
-                places={[10, 1]}
-                fontSize={24}
-                fontWeight={'900'}
-              />
-            </div>
-
-            <div className="rtl flex gap-2"></div>
-          </div>
-        ) : (
-          times.length > 0 && (
-            <div className="rtl flex flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-5 font-bold text-neutral-600">
-              <MapPinX size={48} />
-              <p>اتوبوسی پس از این زمان نیست!</p>
-            </div>
-          )
-        )}
+        <RemainingBox
+          RemainingTime={RemainingTime}
+          timeIndex={timeIndex}
+          timeLength={times.length}
+        />
         {timesManager()}
-        {times.length == 0 && (
-          <div className="rtl flex flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-5 font-bold text-neutral-600">
-            <MapPinX size={48} />
-            <p>لیستی برای این برنامه زمانی تعریف نشده است!</p>
-          </div>
-        )}
-        <ul className="rtl mt-5 grid grid-cols-4 gap-3 text-sm">
-          {times.map((time, index) => (
-            <li
-              key={time.toString()}
-              className={`${index === timeIndex ? 'bg-primary shadow-primary ripple text-white' : 'bg-neutral-100 text-neutral-700 shadow-neutral-100'} relative rounded-xl px-2 py-3 font-bold tracking-widest shadow`}
-            >
-              {format(time)}
-            </li>
-          ))}
-        </ul>
+        <TimeList times={times} timeIndex={timeIndex} format24={format24} />
         {timer.comment && (
-          <div className="rtl mt-8 text-right leading-5 text-neutral-600">
+          <motion.div
+            className="rtl mt-8 text-right leading-5 text-neutral-600"
+            initial={{ translateY: 10, opacity: 0 }}
+            animate={{ translateY: 0, opacity: 1 }}
+          >
             <span className="text-darker font-bold">یادداشت‌ها:&nbsp; </span>
             {timer.comment.split('\n').map((comment, index) => (
               <p key={comment} className="mt-2">
                 {comment}
               </p>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </>

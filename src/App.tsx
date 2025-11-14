@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Timer from './Timer'
 import './style.css'
@@ -10,6 +11,7 @@ import useLocalStorage from './useLocalStorage'
 import { base } from './vars'
 import { BusFront, Settings as SettingsIcon } from 'lucide-react'
 import About from './About'
+import FadePage from './FadePage'
 
 export const defaultRepo = [{ name: 'دانشگاه صنعتی ارومیه', link: './UUT-BUS.xlsx' }]
 export type SettingsType = { format24: boolean; darkMode: boolean }
@@ -61,12 +63,18 @@ function App() {
     <BrowserRouter>
       <div className={`relative`}>
         {/* Full-screen loading overlay */}
-        {loading && (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-10 bg-white text-3xl font-black text-neutral-600">
-            <div className="size-24 animate-spin rounded-full border-8 border-neutral-600 border-t-transparent"></div>
-            <span>در حال بارگیری</span>
-          </div>
-        )}
+        <AnimatePresence>
+          {loading && (
+            <motion.div
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: 'circIn' }}
+              className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-10 bg-white text-3xl font-black text-neutral-600"
+            >
+              <div className="size-24 animate-spin rounded-full border-8 border-neutral-600 border-t-transparent"></div>
+              <span>در حال بارگیری</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <style>
           {!settings.darkMode
@@ -147,31 +155,32 @@ function App() {
             <Route
               path={`${base}settings`}
               element={
-                <Settings
-                  repos={repos}
-                  setRepos={setRepos}
-                  setSettings={setSettings}
-                  settings={settings}
-                />
+                <FadePage>
+                  <Settings
+                    repos={repos}
+                    setRepos={setRepos}
+                    setSettings={setSettings}
+                    settings={settings}
+                  />
+                </FadePage>
               }
             />
             <Route
               path={`${base}about`}
               element={
-                <>
-                  {' '}
+                <FadePage>
                   <style>{css}</style>
                   <About />
-                </>
+                </FadePage>
               }
             />
             <Route
               path={`${base}add`}
               element={
-                <>
+                <FadePage>
                   <style>{css}</style>
                   <AddRepo repos={repos} setRepos={setRepos} />
-                </>
+                </FadePage>
               }
             />
           </Routes>

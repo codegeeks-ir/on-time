@@ -72,7 +72,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
                 return newSettings
               })
             }}
-            className="checked:bg-primary checked:border-primary size-4 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
+            className="checked:bg-primary checked:border-primary size-5 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
           />
           <label htmlFor="overwrite" className="ms-2 text-gray-900">
             استفاده از فرمت زمانی ۲۴ ساعته
@@ -92,7 +92,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
                 return newSettings
               })
             }}
-            className="checked:bg-primary checked:border-primary size-4 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
+            className="checked:bg-primary checked:border-primary size-5 cursor-pointer appearance-none rounded border border-gray-400 transition-all"
           />
 
           <label htmlFor="darkMode" className="ms-2 text-gray-900">

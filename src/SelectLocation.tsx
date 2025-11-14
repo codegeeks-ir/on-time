@@ -88,7 +88,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
         <div className="flex-1">
           <label className="mb-1 block text-sm text-gray-500">مبدا</label>
           <select
-            className="mt-1 block w-full rounded-lg bg-neutral-100 p-3 focus:outline-1"
+            className="mt-1 block w-full rounded-lg bg-neutral-100 p-3 focus:outline-1 focus:outline-neutral-300"
             value={selectedOrigin}
             onChange={handleOriginChange}
             disabled={hasNoData}
@@ -115,7 +115,7 @@ export default function SelectLocation({ times, activeTimer, setActiveTimer }: P
         <div className="flex-1">
           <label className="mb-1 block text-sm text-gray-500">مقصد</label>
           <select
-            className="mt-1 block w-full rounded-lg bg-neutral-100 p-3 focus:outline-1"
+            className="mt-1 block w-full rounded-lg bg-neutral-100 p-3 focus:outline-1 focus:outline-neutral-300"
             value={selectedScheduleId ?? ''}
             onChange={handleDestinationChange}
             disabled={hasNoData || !selectedOrigin}

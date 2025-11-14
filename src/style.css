@@ -46,7 +46,7 @@
 }
 
 @utility glass-button {
-  @apply m-0 rounded-lg border border-neutral-500 p-2 text-neutral-500 transition-all duration-200;
+  @apply m-0 rounded-lg border border-neutral-500 p-2 text-neutral-500 transition-all duration-500;
 }
 @utility selected {
   @apply border-primary bg-alpha text-darker;
@@ -82,7 +82,7 @@ html {
   height: 100%;
   border-radius: 0.75rem;
   z-index: -1;
-  filter: blur(2px);
+  filter: blur(1px);
   animation: ripple cubic-bezier(0.075, 0.82, 0.165, 1) 1.5s infinite;
 }
 
