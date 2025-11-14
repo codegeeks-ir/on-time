@@ -3,8 +3,8 @@
 @font-face {
   font-family: 'Vazirmatn';
   src:
-    url('fonts/Vazirmatn[wght].woff2') format('woff2-variations'),
-    url('fonts/Vazirmatn[wght].woff2') format('woff2') tech('variations');
+    url('../fonts/Vazirmatn[wght].woff2') format('woff2-variations'),
+    url('../fonts/Vazirmatn[wght].woff2') format('woff2') tech('variations');
   font-weight: 100 900;
   font-display: swap;
 }

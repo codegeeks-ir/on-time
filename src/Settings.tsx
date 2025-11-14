@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import Repo from './Repo'
-import type { repoType } from './xlsxLoader'
+import Repo from './components/Repo'
+import type { repoType } from './lib/xlsxLoader'
 import { defaultRepo, type SettingsType } from './App'
 import { base } from './vars'
 import { HelpCircle, Plus, RefreshCw, Trash2 } from 'lucide-react'

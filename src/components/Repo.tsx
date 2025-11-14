@@ -1,4 +1,4 @@
-import { base, origin } from './vars'
+import { base, origin } from '../vars'
 import { ExternalLink, Trash } from 'lucide-react'
 type props = {
   name: string

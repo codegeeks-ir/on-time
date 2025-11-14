@@ -1,7 +1,7 @@
 // TODO: Check file format before adding to the repos
-import type { repoType } from './xlsxLoader'
+import type { repoType } from '../lib/xlsxLoader'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { base } from './vars'
+import { base } from '../vars'
 
 type Props = {
   repos: repoType[]
