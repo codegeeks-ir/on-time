@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import type { scheduleType } from './xlsxLoader'
+import type { scheduleType } from '../lib/xlsxLoader'
 import { ArrowUpDown } from 'lucide-react'
 type Props = {
   times: scheduleType[]

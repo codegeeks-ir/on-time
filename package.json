@@ -8,7 +8,8 @@
     "host": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "format": "pnpm prettier --write ."
+    "format": "pnpm prettier --write .",
+    "check": "pnpm exec tsc --noEmit --watch"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react'
-import type { scheduleType } from './xlsxLoader'
+import type { scheduleType } from '../lib/xlsxLoader'
 import { AnimatePresence, motion } from 'motion/react'
 import TimeList from './TimeList'
 import RemainingBox from './RemainingBox'
