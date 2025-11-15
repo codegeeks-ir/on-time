@@ -131,15 +131,19 @@ function App() {
         </div>
 
         {/* Main content */}
-        <div className="min-h-80 -translate-y-7 rounded-3xl bg-white p-8 pb-16 text-center transition-all duration-200 ease-in">
+        <div className="min-h-80 -translate-y-7 rounded-3xl bg-white p-6 pb-16 text-center transition-all duration-200 ease-in">
           <Routes>
             <Route
               path={base}
               element={
                 displayTimes.length > 0 ? (
-                  <Timer timer={displayTimes[activeTimer]} format24={settings.format24} />
+                  <Timer
+                    timer={displayTimes[activeTimer]}
+                    format24={settings.format24}
+                    activeTimer={activeTimer}
+                  />
                 ) : (
-                  <p>Loading schedules...</p>
+                  <p>در حال بارگیری</p>
                 )
               }
             />

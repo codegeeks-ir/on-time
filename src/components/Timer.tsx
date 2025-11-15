@@ -1,90 +1,93 @@
-import { useEffect, useRef, useState, memo, useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState, memo, useMemo } from 'react'
 import type { scheduleType } from '../lib/xlsxLoader'
 import { AnimatePresence, motion } from 'motion/react'
 import TimeList from './TimeList'
 import RemainingBox from './RemainingBox'
-function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) {
+
+function Timer({
+  timer,
+  format24,
+  activeTimer,
+}: {
+  timer: scheduleType
+  format24: boolean
+  activeTimer: number
+}) {
   const [current, setCurrent] = useState(new Date())
-  const [timeIndex, setTimeIndex] = useState(0)
-  const timerRef = useRef(0)
+  const timerRef = useRef<number | null>(null)
   const [activeSub, setActiveSub] = useState(0)
 
-  const times = useMemo((): string[] => {
-    if (activeSub < timer.subSchedule.length) {
-      return timer.subSchedule[activeSub].times
-    } else {
-      setActiveSub(0)
-      return timer.subSchedule[0].times
-    }
-  }, [activeSub, timer])
-
-  // This function only depends on `timer.times`, so we use useCallback to avoid re-creating it.
-  const closestTime = useCallback(
-    (hour: number, min: number): [string, number] => {
-      const timeList = times
-      const total = hour * 60 + min
-      for (let i = 0; i < timeList.length; i++) {
-        const [targetHour, targetMin] = timeList[i].split(':')
-        const target = parseInt(targetHour, 10) * 60 + parseInt(targetMin, 10)
-        if (total < target) {
-          return [timeList[i], i]
-        } else if (total === target && i < timeList.length - 1) {
-          return [timeList[i + 1], i + 1]
-        }
-      }
-      return ['-1', -1]
-    },
-    [times]
-  )
-
-  const RemainingTime = useMemo(() => {
-    if (timeIndex < 0 || times[timeIndex] == null) return { hour: 0, min: 0, sec: 0 }
-    const time = times[timeIndex]
-    const [hour, min] = time.split(':').map((item) => parseInt(item, 10))
-    const currentInt = current.getHours() * 3600 + current.getMinutes() * 60 + current.getSeconds()
-    const target = hour * 3600 + min * 60
-    const totalTime = target - currentInt
-    const remainingHour = Math.floor(totalTime / 3600)
-    const remainingMin = Math.floor((totalTime % 3600) / 60)
-    const remainingSec = Math.floor((totalTime % 3600) % 60)
-    return {
-      hour: remainingHour,
-      min: remainingMin,
-      sec: remainingSec,
-    }
-  }, [times, timeIndex, current])
-
-  // Effect to update `current` every second without affecting the parent component
+  // Keep activeSub bounded in an effect (safe)
   useEffect(() => {
-    timerRef.current = setInterval(() => {
+    if (activeSub >= timer.subSchedule.length) setActiveSub(0)
+  }, [activeSub, timer.subSchedule.length])
+
+  // times is pure derived data
+  const times = useMemo(() => {
+    return timer.subSchedule[activeSub]?.times ?? []
+  }, [activeSub, timer.subSchedule])
+
+  // computeIndex: pure helper — deterministic, synchronous
+  const computeIndex = (timesArr: string[], now: Date) => {
+    if (!timesArr || timesArr.length === 0) return -1
+    const total = now.getHours() * 60 + now.getMinutes()
+    for (let i = 0; i < timesArr.length; i++) {
+      const [h, m] = timesArr[i].split(':').map(Number)
+      const t = h * 60 + m
+      if (total < t) return i
+      if (total === t && i < timesArr.length - 1) return i + 1
+    }
+    return -1
+  }
+
+  // DERIVED synchronously during render: no state, no flicker
+  const derivedIndex = useMemo(() => computeIndex(times, current), [times, current])
+
+  // RemainingTime computed from derivedIndex (also synchronous)
+  const RemainingTime = useMemo(() => {
+    if (derivedIndex < 0 || !times[derivedIndex]) return { hour: 0, min: 0, sec: 0 }
+
+    const [h, m] = times[derivedIndex].split(':').map(Number)
+    const nowSec = current.getHours() * 3600 + current.getMinutes() * 60 + current.getSeconds()
+    const targetSec = h * 3600 + m * 60
+    const diff = Math.max(targetSec - nowSec, 0)
+
+    return {
+      hour: Math.floor(diff / 3600),
+      min: Math.floor((diff % 3600) / 60),
+      sec: diff % 60,
+    }
+  }, [times, derivedIndex, current])
+
+  // tick every second
+  useEffect(() => {
+    timerRef.current = window.setInterval(() => {
       setCurrent(new Date())
     }, 1000)
-
-    return () => clearInterval(timerRef.current)
+    return () => {
+      if (timerRef.current != null) clearInterval(timerRef.current)
+    }
   }, [])
 
-  // Effect to calculate the closest time only when `timer.times` changes
-  useEffect(() => {
-    const [, index] = closestTime(current.getHours(), current.getMinutes())
-    setTimeIndex(index)
-  }, [closestTime, current])
-
+  // Sub schedule buttons (unchanged)
   function timesManager() {
     if (timer.subSchedule.length > 0) {
-      const subSelector = timer.subSchedule.map((sub, index) => {
-        return (
-          <button
-            type="button"
-            className={activeSub === index ? 'selected glass-button' : 'glass-button'}
-            onClick={() => setActiveSub(index)}
-            key={sub.name}
-          >
-            {sub.name}
-          </button>
-        )
-      })
-      return <div className="rtl m-4 flex justify-center gap-3 text-sm">{subSelector}</div>
+      return (
+        <div className="rtl m-4 flex justify-center gap-3 text-sm">
+          {timer.subSchedule.map((sub, index) => (
+            <button
+              type="button"
+              key={sub.name ?? index}
+              className={activeSub === index ? 'selected glass-button' : 'glass-button'}
+              onClick={() => setActiveSub(index)}
+            >
+              {sub.name}
+            </button>
+          ))}
+        </div>
+      )
     }
+    return null
   }
 
   return (
@@ -102,9 +105,11 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
             </motion.h2>
           </AnimatePresence>
         </div>
-        <div className="flex h-14 items-center justify-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
+
+        <div className="flex h-14 w-12 items-center justify-center rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
           <h2>به</h2>
         </div>
+
         <div className="flex h-14 flex-1 items-center justify-center overflow-hidden rounded bg-neutral-50 p-3 text-lg font-black tracking-wide">
           <AnimatePresence mode="wait">
             <motion.h2
@@ -118,14 +123,18 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
           </AnimatePresence>
         </div>
       </div>
-      <div className="mx-auto mt-4 max-w-md">
+
+      <div className="mx-auto mt-2 max-w-md">
         <RemainingBox
           RemainingTime={RemainingTime}
-          timeIndex={timeIndex}
+          timeIndex={derivedIndex}
           timeLength={times.length}
         />
+
         {timesManager()}
-        <TimeList times={times} timeIndex={timeIndex} format24={format24} />
+
+        <TimeList times={times} timeIndex={derivedIndex} format24={format24} />
+
         {timer.comment && (
           <motion.div
             className="rtl mt-8 text-right leading-5 text-neutral-600"
@@ -133,8 +142,8 @@ function Timer({ timer, format24 }: { timer: scheduleType; format24: boolean }) 
             animate={{ translateY: 0, opacity: 1 }}
           >
             <span className="text-darker font-bold">یادداشت‌ها:&nbsp; </span>
-            {timer.comment.split('\n').map((comment, index) => (
-              <p key={comment} className="mt-2">
+            {timer.comment.split('\n').map((comment, i) => (
+              <p key={i} className="mt-2">
                 {comment}
               </p>
             ))}
