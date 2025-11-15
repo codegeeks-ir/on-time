@@ -3,7 +3,7 @@ import Repo from './components/Repo'
 import type { repoType } from './lib/xlsxLoader'
 import { defaultRepo, type SettingsType } from './App'
 import { base } from './vars'
-import { HelpCircle, Plus, RefreshCw, Trash2 } from 'lucide-react'
+import { HelpCircle, Plus, RefreshCw, Share2 } from 'lucide-react'
 
 type props = {
   repos: repoType[]
@@ -26,8 +26,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
   }
 
   return (
-    <div className="rtl mx-auto flex max-w-3xl flex-col gap-6">
-      <h1 className="border-primary text-primary border-b text-2xl font-bold">تنظیمات</h1>
+    <>
       <div className="flex flex-col gap-5">
         <h2>برنامه‌های زمانی فعال:</h2>
         <div className="flex flex-col gap-3">
@@ -49,7 +48,7 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
             </Link>
             <button
               type="button"
-              className="glass-button flex items-center gap-2"
+              className="glass-button flex items-center gap-2 bg-neutral-500/10"
               onClick={resetProgram}
             >
               <RefreshCw />
@@ -101,12 +100,19 @@ export default function Settings({ repos, setRepos, settings, setSettings }: pro
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="mt-5 flex flex-col gap-3">
+        <Link
+          to={`${base}share`}
+          className="glass-button flex items-center gap-3 bg-neutral-500/10 p-5"
+        >
+          <Share2 />
+          به اشتراک گذاری برنامه
+        </Link>
         <Link to={`${base}about`} className="glass-button selected flex items-center gap-3 p-5">
           <HelpCircle />
           راهنمای برنامه
         </Link>
       </div>
-    </div>
+    </>
   )
 }

@@ -41,10 +41,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
     }
   }
   return (
-    <div className="mx-auto max-w-3xl">
-      <h1 className="border-primary text-primary border-b text-2xl font-bold">
-        افزودن برنامه جدید
-      </h1>
+    <>
       <div className="rtl mt-5 text-justify">
         <p>
           <strong className="font-bold text-red-600">توجه!</strong> این صفحه برای اضافه کردن برنامه
@@ -100,7 +97,7 @@ const AddRepo = ({ repos, setRepos }: Props) => {
 
         <input type="submit" value="ثبت" className="glass-button selected" />
       </form>
-    </div>
+    </>
   )
 }
 

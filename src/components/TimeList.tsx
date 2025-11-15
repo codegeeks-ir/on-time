@@ -31,7 +31,7 @@ const TimeList = ({
   }
 
   return (
-    <motion.ul className="rtl mt-5 grid grid-cols-4 gap-3 text-sm">
+    <motion.ul className="mt-5 grid grid-cols-4 gap-3 text-sm">
       <AnimatePresence mode="popLayout">
         {times.map((time, index) => (
           <motion.li

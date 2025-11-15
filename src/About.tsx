@@ -2,10 +2,7 @@ import { base, origin } from './vars'
 
 const About = () => {
   return (
-    <div className="rtl text-right leading-8">
-      <h1 className="border-primary text-primary mb-5 border-b text-center text-2xl font-bold">
-        راهنما
-      </h1>
+    <div className="text-right leading-loose">
       <p>
         پروژه <strong className="text-primary">آن‌تایم</strong> با هدف راحت‌تر کردن دسترسی به زمان
         سرویس‌ها و اطلاع از زمان سرویس بعدی ساخته شده است.

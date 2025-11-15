@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import ShareBox from './components/ShareBox'
 import Timer from './components/Timer'
 import './css/style.css'
 import Settings from './Settings'
@@ -54,8 +55,6 @@ function App() {
 
     load()
   }, [repos])
-
-  const css = `.header{min-height:100px;!important}`
 
   const displayTimes = loading ? prevTimes : times
 
@@ -128,14 +127,6 @@ function App() {
                 />
               }
             />
-            <Route
-              path={`${base}settings`}
-              element={
-                <div className="relative h-full text-center text-white">
-                  <style>{css}</style>
-                </div>
-              }
-            />
           </Routes>
         </div>
 
@@ -155,7 +146,7 @@ function App() {
             <Route
               path={`${base}settings`}
               element={
-                <FadePage>
+                <FadePage title="تنظیمات">
                   <Settings
                     repos={repos}
                     setRepos={setRepos}
@@ -168,8 +159,7 @@ function App() {
             <Route
               path={`${base}about`}
               element={
-                <FadePage>
-                  <style>{css}</style>
+                <FadePage title="راهنما">
                   <About />
                 </FadePage>
               }
@@ -177,9 +167,16 @@ function App() {
             <Route
               path={`${base}add`}
               element={
-                <FadePage>
-                  <style>{css}</style>
+                <FadePage title="افزودن برنامه جدید">
                   <AddRepo repos={repos} setRepos={setRepos} />
+                </FadePage>
+              }
+            />
+            <Route
+              path={`${base}share`}
+              element={
+                <FadePage title="به اشتراک گذاری برنامه">
+                  <ShareBox url={`${window.location.origin}${base}`} />
                 </FadePage>
               }
             />

@@ -17,6 +17,7 @@
     "motion": "^12.23.24",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-qr-code": "^2.0.18",
     "react-router-dom": "^7.9.5",
     "xlsx": "^0.18.5"
   },
